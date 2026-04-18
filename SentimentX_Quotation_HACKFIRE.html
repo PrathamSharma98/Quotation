@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SentimentX — Official Project Quotation | HACKFIRE</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:         #070b12;
+    --surface:    #0e1521;
+    --surface2:   #131e30;
+    --border:     rgba(255,255,255,0.07);
+    --border2:    rgba(255,255,255,0.13);
+    --blue:       #3b82f6;
+    --blue-d:     rgba(59,130,246,0.12);
+    --cyan:       #06b6d4;
+    --green:      #10b981;
+    --green-d:    rgba(16,185,129,0.10);
+    --amber:      #f59e0b;
+    --amber-d:    rgba(245,158,11,0.10);
+    --red:        #ef4444;
+    --red-d:      rgba(239,68,68,0.10);
+    --purple:     #8b5cf6;
+    --purple-d:   rgba(139,92,246,0.12);
+    --text:       #e2e8f0;
+    --muted:      #64748b;
+    --head:       'Syne', sans-serif;
+    --mono:       'DM Mono', monospace;
+    --body:       'DM Sans', sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 13px;
+    line-height: 1.6;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(59,130,246,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,0.025) 1px, transparent 1px);
+    background-size: 36px 36px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+    position: relative; z-index: 1;
+  }
+
+  /* ─── HEADER ──────────────────────────────── */
+  .header {
+    background: linear-gradient(135deg, #091628 0%, #0c1e38 55%, #091220 100%);
+    border: 1px solid rgba(59,130,246,0.22);
+    border-top: 3px solid var(--blue);
+    border-radius: 0 0 18px 18px;
+    padding: 32px 44px 28px;
+    margin-bottom: 24px;
+    position: relative; overflow: hidden;
+  }
+  .header::after {
+    content: '';
+    position: absolute; top: -80px; right: -80px;
+    width: 340px; height: 340px;
+    background: radial-gradient(circle, rgba(59,130,246,0.11) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .header::before {
+    content: '';
+    position: absolute; bottom: -50px; left: 25%;
+    width: 260px; height: 220px;
+    background: radial-gradient(circle, rgba(139,92,246,0.07) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .brand-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 22px;
+  }
+  .brand-left { display: flex; align-items: center; gap: 14px; }
+  .brand-icon {
+    width: 46px; height: 46px;
+    background: linear-gradient(135deg, #1d4ed8, #7c3aed);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 0 28px rgba(99,102,241,0.4);
+    flex-shrink: 0;
+  }
+  .brand-name {
+    font-family: var(--head);
+    font-size: 20px; font-weight: 800;
+    color: #f8fafc; letter-spacing: -0.5px;
+  }
+  .brand-sub {
+    font-family: var(--mono);
+    font-size: 9px; color: var(--muted);
+    letter-spacing: 1.5px; text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+  .doc-badge {
+    font-family: var(--mono);
+    font-size: 10px; font-weight: 500;
+    color: var(--green);
+    background: var(--green-d);
+    border: 1px solid rgba(16,185,129,0.28);
+    border-radius: 6px;
+    padding: 4px 12px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+  .team-badge {
+    font-family: var(--mono);
+    font-size: 10px; font-weight: 500;
+    color: var(--amber);
+    background: var(--amber-d);
+    border: 1px solid rgba(245,158,11,0.28);
+    border-radius: 6px;
+    padding: 4px 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .doc-title {
+    font-family: var(--head);
+    font-size: 28px; font-weight: 800;
+    color: #f8fafc; letter-spacing: -0.8px;
+    line-height: 1.15; margin-bottom: 7px;
+  }
+  .doc-title .accent  { color: var(--blue); }
+  .doc-title .accent2 { color: var(--purple); }
+  .doc-desc {
+    font-size: 13px; color: #94a3b8;
+    font-weight: 300; max-width: 580px; margin-bottom: 18px;
+  }
+
+  .meta-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+    margin-top: 16px;
+  }
+  .meta-item {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px; padding: 9px 12px;
+  }
+  .meta-label {
+    font-family: var(--mono); font-size: 8px; color: var(--muted);
+    letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 3px;
+  }
+  .meta-value { font-size: 12px; font-weight: 500; color: var(--text); }
+  .meta-value.live { color: var(--green); }
+  .meta-value.fire { color: var(--amber); }
+
+  /* ─── SECTION LABEL ───────────────────────── */
+  .sec-label {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--mono); font-size: 9px; font-weight: 500;
+    color: var(--blue); letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .sec-label span {
+    background: var(--blue-d); border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 4px; padding: 2px 7px;
+  }
+  .sec-label::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(to right, rgba(59,130,246,0.25), transparent);
+  }
+  .section { margin-bottom: 22px; }
+
+  /* ─── STAT CARDS ──────────────────────────── */
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+    margin-bottom: 22px;
+  }
+  .scard {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 15px 14px;
+    position: relative; overflow: hidden;
+  }
+  .scard::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  }
+  .scard.blue::before   { background: linear-gradient(90deg, var(--blue), var(--cyan)); }
+  .scard.purple::before { background: linear-gradient(90deg, var(--purple), var(--blue)); }
+  .scard.green::before  { background: linear-gradient(90deg, var(--green), #34d399); }
+  .scard.amber::before  { background: linear-gradient(90deg, var(--amber), #fbbf24); }
+  .scard-label {
+    font-family: var(--mono); font-size: 8px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 7px;
+  }
+  .scard-value {
+    font-family: var(--head); font-size: 18px; font-weight: 700;
+    color: #f1f5f9; line-height: 1; margin-bottom: 3px;
+  }
+  .scard-sub { font-size: 10px; color: var(--muted); }
+
+  /* ─── EXEC BOX ────────────────────────────── */
+  .exec-box {
+    background: var(--blue-d);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-left: 3px solid var(--blue);
+    border-radius: 0 10px 10px 0;
+    padding: 16px 20px;
+    font-size: 13px; line-height: 1.7;
+    color: #cbd5e1; margin-bottom: 22px;
+  }
+  .exec-box strong { color: #93c5fd; font-weight: 500; }
+
+  /* ─── MAIN QUOTATION TABLE ────────────────── */
+  .quot-wrap {
+    border: 1px solid var(--border2);
+    border-radius: 14px; overflow: hidden;
+    margin-bottom: 22px;
+  }
+  .quot-topbar {
+    background: #0a1628;
+    padding: 11px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border2);
+  }
+  .quot-topbar-title {
+    font-family: var(--mono); font-size: 9px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 1.5px;
+  }
+  .quot-topbar-note {
+    font-family: var(--mono); font-size: 8px; color: var(--amber);
+    background: var(--amber-d); border: 1px solid rgba(245,158,11,0.22);
+    border-radius: 4px; padding: 2px 8px; letter-spacing: 0.5px;
+  }
+
+  .quot-table {
+    width: 100%; border-collapse: collapse;
+    background: var(--surface);
+  }
+  .quot-table thead tr { background: #1e2d5a; }
+  .quot-table thead th {
+    padding: 11px 14px;
+    font-family: var(--mono); font-size: 9px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 1.2px;
+    color: #c7d2fe; text-align: left;
+    border-bottom: 1px solid rgba(99,102,241,0.3);
+    border-right: 1px solid rgba(99,102,241,0.15);
+  }
+  .quot-table thead th:last-child { border-right: none; text-align: right; }
+
+  .quot-table tr.section-row td {
+    background: #111c30;
+    padding: 8px 14px;
+    font-family: var(--head); font-size: 11px; font-weight: 700;
+    color: #93c5fd; letter-spacing: 0.3px;
+    border-bottom: 1px solid rgba(59,130,246,0.15);
+    border-top: 1px solid rgba(59,130,246,0.1);
+  }
+
+  .quot-table tbody tr.data-row {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+  }
+  .quot-table tbody tr.data-row:hover { background: rgba(59,130,246,0.04); }
+  .quot-table tbody tr.data-row td {
+    padding: 11px 14px; vertical-align: top;
+    border-right: 1px solid var(--border);
+    font-size: 12px; color: #cbd5e1;
+  }
+  .quot-table tbody tr.data-row td:last-child {
+    border-right: none; text-align: right;
+    font-family: var(--mono); font-size: 12px; font-weight: 500;
+    color: #f1f5f9;
+  }
+
+  .col-cat   { font-family: var(--mono); font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; white-space: nowrap; width: 120px; }
+  .col-param { font-weight: 500; color: #e2e8f0; width: 170px; }
+  .col-detail{ font-size: 11.5px; color: #94a3b8; line-height: 1.55; }
+  .col-qty   { font-family: var(--mono); font-size: 11px; color: #94a3b8; white-space: nowrap; width: 140px; }
+  .col-cost  { width: 150px; }
+
+  .dash { color: var(--muted); font-family: var(--mono); font-size: 11px; text-align: center !important; }
+
+  .tot-row td {
+    background: linear-gradient(90deg, rgba(59,130,246,0.1), rgba(99,102,241,0.07)) !important;
+    border-top: 1px solid rgba(59,130,246,0.3) !important;
+    border-bottom: 1px solid rgba(59,130,246,0.2) !important;
+    padding: 15px 14px !important;
+  }
+  .tot-label  { font-family: var(--head) !important; font-size: 13px !important; font-weight: 700 !important; color: #f1f5f9 !important; }
+  .tot-amount { font-family: var(--head) !important; font-size: 19px !important; font-weight: 800 !important; color: var(--blue) !important; text-align: right; }
+
+  .maint-row td {
+    background: var(--green-d) !important;
+    border-top: 1px solid rgba(16,185,129,0.2) !important;
+    padding: 11px 14px !important;
+  }
+  .maint-cost { font-family: var(--mono) !important; font-size: 13px !important; font-weight: 500 !important; color: var(--green) !important; text-align: right; }
+
+  /* ─── TIMELINE ────────────────────────────── */
+  .timeline {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    background: var(--surface); border: 1px solid var(--border2);
+    border-radius: 12px; overflow: hidden; margin-bottom: 22px;
+  }
+  .tl-phase { padding: 16px 14px; border-right: 1px solid var(--border); position: relative; }
+  .tl-phase:last-child { border-right: none; }
+  .tl-phase::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; }
+  .tl-phase.p1::after { background: var(--blue); }
+  .tl-phase.p2::after { background: var(--purple); }
+  .tl-phase.p3::after { background: var(--cyan); }
+  .tl-phase.p4::after { background: var(--green); }
+  .tl-week  { font-family: var(--mono); font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+  .tl-name  { font-family: var(--head); font-size: 12px; font-weight: 700; color: #e2e8f0; margin-bottom: 4px; }
+  .tl-desc  { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+  /* ─── SUMMARY TABLE ───────────────────────── */
+  .summary-wrap { border: 1px solid var(--border2); border-radius: 12px; overflow: hidden; margin-bottom: 22px; }
+  .summary-table { width: 100%; border-collapse: collapse; background: var(--surface); }
+  .summary-table thead tr { background: #1e2d5a; }
+  .summary-table thead th {
+    padding: 10px 16px; font-family: var(--mono); font-size: 9px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 1.2px; color: #c7d2fe;
+    text-align: left; border-bottom: 1px solid rgba(99,102,241,0.3);
+  }
+  .summary-table thead th.r { text-align: right; }
+  .summary-table tbody tr { border-bottom: 1px solid var(--border); }
+  .summary-table td { padding: 11px 16px; font-size: 12px; color: #cbd5e1; }
+  .summary-table td.r { text-align: right; font-family: var(--mono); font-weight: 500; color: #f1f5f9; }
+  .summary-table td.pct { text-align: right; font-family: var(--mono); font-size: 10px; color: var(--muted); }
+  .summary-table .gt td {
+    background: linear-gradient(90deg, rgba(59,130,246,0.1), rgba(99,102,241,0.07));
+    border-top: 1px solid rgba(59,130,246,0.3);
+    padding: 14px 16px;
+  }
+  .summary-table .am td {
+    background: var(--green-d);
+    border-top: 1px solid rgba(16,185,129,0.2);
+  }
+
+  /* ─── TC ──────────────────────────────────── */
+  .tc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 22px; }
+  .tc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .tc-title { font-family: var(--mono); font-size: 9px; color: var(--purple); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 9px; }
+  .tc-list { list-style: none; }
+  .tc-list li { display: flex; align-items: flex-start; gap: 7px; font-size: 11.5px; color: var(--muted); padding: 2px 0; line-height: 1.5; }
+  .tc-list li::before { content: '▸'; color: var(--purple); font-size: 9px; margin-top: 3px; flex-shrink: 0; }
+
+  /* ─── FOOTER ──────────────────────────────── */
+  .footer {
+    background: #0a1628; border: 1px solid var(--border2);
+    border-radius: 14px; padding: 24px 32px;
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;
+  }
+  .footer-brand { font-family: var(--head); font-size: 18px; font-weight: 800; color: #f8fafc; margin-bottom: 3px; }
+  .footer-team  { font-family: var(--mono); font-size: 10px; color: var(--amber); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
+  .footer-tag   { font-size: 11px; color: var(--muted); margin-bottom: 12px; }
+  .footer-ref   { font-family: var(--mono); font-size: 9px; color: #475569; letter-spacing: 0.5px; }
+  .sig-block    { text-align: right; }
+  .sig-name     { font-family: var(--head); font-size: 14px; font-weight: 700; color: #e2e8f0; margin-bottom: 4px; }
+  .sig-cursive  { font-family: 'Georgia', serif; font-size: 20px; font-style: italic; color: #93c5fd; letter-spacing: 1px; display: block; margin-bottom: 3px; }
+  .sig-line     { font-family: var(--mono); font-size: 10px; color: var(--muted); border-top: 1px solid var(--border2); padding-top: 7px; margin-top: 7px; line-height: 1.8; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ─── HEADER ─────────────────────────────── -->
+  <div class="header">
+    <div class="brand-row">
+      <div class="brand-left">
+        <div class="brand-icon">🧠</div>
+        <div>
+          <div class="brand-name">SentimentX</div>
+          <div class="brand-sub">Voter Awareness &amp; Misinformation Control Platform</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="doc-badge">● Official Quotation</div>
+        <div class="team-badge">🔥 Team HACKFIRE</div>
+      </div>
+    </div>
+    <div class="doc-title">Project <span class="accent">Cost</span> &amp; <span class="accent2">Scope</span> Quotation</div>
+    <div class="doc-desc">AI-powered real-time voter sentiment analysis, misinformation detection &amp; constituency intelligence — hackathon-edition 1-month sprint by Team HACKFIRE.</div>
+    <div class="meta-grid">
+      <div class="meta-item"><div class="meta-label">Team Name</div><div class="meta-value fire">🔥 HACKFIRE</div></div>
+      <div class="meta-item"><div class="meta-label">Quote Ref</div><div class="meta-value" style="font-family:var(--mono);font-size:10px;">SX-HF-2026-001</div></div>
+      <div class="meta-item"><div class="meta-label">Duration</div><div class="meta-value">1 Month</div></div>
+      <div class="meta-item"><div class="meta-label">Domain</div><div class="meta-value">GovTech / ElecTech</div></div>
+      <div class="meta-item"><div class="meta-label">Status</div><div class="meta-value live">● Active Proposal</div></div>
+    </div>
+  </div>
+
+  <!-- ─── STAT CARDS ─────────────────────────── -->
+  <div class="stats-grid">
+    <div class="scard blue">
+      <div class="scard-label">Total Project Cost</div>
+      <div class="scard-value">₹4,97,500</div>
+      <div class="scard-sub">Excl. GST — under ₹5L</div>
+    </div>
+    <div class="scard purple">
+      <div class="scard-label">Platform Modules</div>
+      <div class="scard-value">7 Modules</div>
+      <div class="scard-sub">AI + Real-time + Fact-check</div>
+    </div>
+    <div class="scard green">
+      <div class="scard-label">Sprint Duration</div>
+      <div class="scard-value">30 Days</div>
+      <div class="scard-sub">Full hackathon build</div>
+    </div>
+    <div class="scard amber">
+      <div class="scard-label">Team Size</div>
+      <div class="scard-value">6 Members</div>
+      <div class="scard-sub">HACKFIRE core team</div>
+    </div>
+  </div>
+
+  <!-- ─── EXEC SUMMARY ───────────────────────── -->
+  <div class="section">
+    <div class="sec-label"><span>01</span> Executive Summary</div>
+    <div class="exec-box">
+      <strong>SentimentX</strong> by Team <strong>HACKFIRE</strong> is a real-time AI-powered political intelligence platform for <strong>voter awareness, misinformation control, and constituency-level sentiment analysis</strong>. This 1-month hackathon sprint covers full MVP development — all 7 dashboard modules, NLP sentiment pipeline (Hindi + English + Hinglish), live data feeds, AI fact-check assistant, and war-room export. Total budget is strictly under <strong>₹5,00,000</strong> including all cloud, API, team, and contingency costs.
+    </div>
+  </div>
+
+  <!-- ─── TIMELINE ────────────────────────────── -->
+  <div class="section">
+    <div class="sec-label"><span>02</span> 1-Month Sprint Timeline</div>
+    <div class="timeline">
+      <div class="tl-phase p1">
+        <div class="tl-week">Week 1</div>
+        <div class="tl-name">Setup &amp; Design</div>
+        <div class="tl-desc">Architecture, Figma UI, API keys, DB schema, NLP model selection, cloud setup</div>
+      </div>
+      <div class="tl-phase p2">
+        <div class="tl-week">Week 2</div>
+        <div class="tl-name">Core Build</div>
+        <div class="tl-desc">Backend APIs, NLP pipeline, React dashboard, real-time WebSocket feed, booth heatmap</div>
+      </div>
+      <div class="tl-phase p3">
+        <div class="tl-week">Week 3</div>
+        <div class="tl-name">AI Features</div>
+        <div class="tl-desc">AI fact-check assistant, misinformation alerts, constituency analysis, war-room export</div>
+      </div>
+      <div class="tl-phase p4">
+        <div class="tl-week">Week 4</div>
+        <div class="tl-name">Polish &amp; Demo</div>
+        <div class="tl-desc">QA, bug fixes, demo data load, presentation prep, deployment, hackathon submission</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── MAIN QUOTATION TABLE ───────────────── -->
+  <div class="section">
+    <div class="sec-label"><span>03</span> Detailed Quotation</div>
+    <div class="quot-wrap">
+      <div class="quot-topbar">
+        <div class="quot-topbar-title">SentimentX — HACKFIRE 1-Month Cost Breakdown</div>
+        <div class="quot-topbar-note">All figures Excl. GST (18% applicable)</div>
+      </div>
+      <table class="quot-table">
+        <thead>
+          <tr>
+            <th>Category / Section</th>
+            <th>Parameter / Question</th>
+            <th>Example Input / Details</th>
+            <th>Quantity / Duration</th>
+            <th>Quoted Cost (₹) Excl. Taxes</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- SECTION 1 -->
+          <tr class="section-row"><td colspan="5">1. Basic Details</td></tr>
+          <tr class="data-row">
+            <td class="col-cat"></td>
+            <td class="col-param">Team Name / Startup Name</td>
+            <td class="col-detail">HACKFIRE</td>
+            <td class="col-qty dash">—</td>
+            <td class="dash">—</td>
+          </tr>
+          <tr class="data-row">
+            <td class="col-cat"></td>
+            <td class="col-param">Project Title</td>
+            <td class="col-detail">SentimentX — AI Voter Awareness &amp; Misinformation Control Platform</td>
+            <td class="col-qty dash">—</td>
+            <td class="dash">—</td>
+          </tr>
+
+          <!-- SECTION 2 -->
+          <tr class="section-row"><td colspan="5">2. Scope of Work</td></tr>
+          <tr class="data-row">
+            <td class="col-cat"></td>
+            <td class="col-param">Project Deliverables</td>
+            <td class="col-detail">Full-stack web platform with 7 modules: Overview Dashboard, Voter Corner, Booth Analysis, Constituency Analysis, Integrity &amp; Awareness, Fact Check Hub, AI Political Assistant. Live sentiment feed across English / Hindi / Hinglish.</td>
+            <td class="col-qty dash">—</td>
+            <td class="dash">—</td>
+          </tr>
+          <tr class="data-row">
+            <td class="col-cat"></td>
+            <td class="col-param">Technical Specifications</td>
+            <td class="col-detail">Real-time NLP sentiment pipeline, social signal ingestion (Twitter/X API + YouTube), constituency heatmaps, booth-level micro-insights, GPT-4o AI fact-check engine, misinformation alert system, war-room PDF/CSV export, multilingual PWA.</td>
+            <td class="col-qty dash">—</td>
+            <td class="dash">—</td>
+          </tr>
+          <tr class="data-row">
+            <td class="col-cat"></td>
+            <td class="col-param">Project Timeline / Duration</td>
+            <td class="col-detail">1 Month (4-week hackathon sprint): Setup → Core Build → AI Features → Polish &amp; Demo Submission</td>
+            <td class="col-qty">30 Days</td>
+            <td class="dash">—</td>
+          </tr>
+          <tr class="data-row">
+            <td class="col-cat"></td>
+            <td class="col-param">Resource Requirements</td>
+            <td class="col-detail">Twitter/X API Basic, YouTube Data API (free tier), OpenAI API (GPT-4o), Google Gemini API (free tier), AWS free-tier + t3.small upgrade, domain + SSL, GitHub Actions CI/CD.</td>
+            <td class="col-qty dash">—</td>
+            <td class="dash">—</td>
+          </tr>
+
+          <!-- SECTION 3: COST ALLOCATION -->
+          <tr class="section-row"><td colspan="5">3. Cost Allocation</td></tr>
+
+          <tr class="data-row">
+            <td class="col-cat">Prototype &amp; Testing</td>
+            <td class="col-param">Prototype &amp; Testing Cost</td>
+            <td class="col-detail">MVP build with demo/synthetic data — all 7 modules functional. Includes Figma prototype, UI component library setup, cross-browser QA, mobile responsive testing, demo rehearsal data load.</td>
+            <td class="col-qty">1 MVP, 30 days</td>
+            <td class="col-cost">₹ 30,000</td>
+          </tr>
+
+          <tr class="data-row">
+            <td class="col-cat">Infrastructure</td>
+            <td class="col-param">Machinery / Cloud Infrastructure</td>
+            <td class="col-detail">AWS EC2 t3.small (backend + NLP inference) + RDS PostgreSQL micro + S3 storage + CloudFront CDN + Redis ElastiCache (cache layer). 1-month sprint pricing — no reserved instance needed.</td>
+            <td class="col-qty">1 month, AWS</td>
+            <td class="col-cost">₹ 45,000</td>
+          </tr>
+
+          <tr class="data-row">
+            <td class="col-cat">Team Stipends</td>
+            <td class="col-param">Team / Labour Stipends</td>
+            <td class="col-detail">6-member HACKFIRE team: 1 ML Engineer, 1 Backend Dev (FastAPI/Node), 1 Frontend Dev (React), 1 Full-Stack Dev, 1 UI/UX + Data Analyst, 1 Project Lead + Political Research. Hackathon sprint rate ₹15,000/member flat for 1 month.</td>
+            <td class="col-qty">6 members × 1 month</td>
+            <td class="col-cost">₹ 90,000</td>
+          </tr>
+
+          <tr class="data-row">
+            <td class="col-cat">Execution</td>
+            <td class="col-param">Execution &amp; Deployment</td>
+            <td class="col-detail">CI/CD pipeline (GitHub Actions), Docker containerisation, production deployment on AWS, load testing, domain registration (sentimentx.in), SSL certificate, final demo environment setup.</td>
+            <td class="col-qty">Full deployment</td>
+            <td class="col-cost">₹ 25,000</td>
+          </tr>
+
+          <tr class="data-row">
+            <td class="col-cat">Software / APIs</td>
+            <td class="col-param">Software / Cloud Costs</td>
+            <td class="col-detail">Twitter/X API Basic (₹7,000/mo × 1), OpenAI GPT-4o API calls (~₹12,000 estimated for 1 month of demo + testing volume), Google Gemini API (free tier), YouTube Data API (free tier), Datadog free tier monitoring, GitHub Pro.</td>
+            <td class="col-qty">1 month</td>
+            <td class="col-cost">₹ 22,000</td>
+          </tr>
+
+          <tr class="data-row">
+            <td class="col-cat">Development</td>
+            <td class="col-param">Dashboard &amp; App Dev</td>
+            <td class="col-detail">React.js frontend (all 7 modules: sentiment overview, voter corner, booth heatmap, constituency drill-down, fact-check hub, AI assistant, misinformation watch), FastAPI + Node.js backend, PostgreSQL + TimescaleDB, Python NLP (HuggingFace IndicBERT + spaCy), WebSocket real-time feed, war-room PDF export.</td>
+            <td class="col-qty">Full-stack, 1 month</td>
+            <td class="col-cost">₹ 3,60,000</td>
+          </tr>
+
+          <tr class="data-row">
+            <td class="col-cat">Fund</td>
+            <td class="col-param">Contingency Fund</td>
+            <td class="col-detail">10% of total costs — API rate limit overages, emergency cloud scaling, last-minute tooling, miscellaneous sprint expenses.</td>
+            <td class="col-qty">10% of subtotal</td>
+            <td class="col-cost">₹ 25,500</td>
+          </tr>
+
+          <!-- TOTAL -->
+          <tr class="tot-row">
+            <td colspan="4"><span class="tot-label">TOTAL ESTIMATED COST &nbsp;(Excluding GST)</span></td>
+            <td><div class="tot-amount">₹ 4,97,500</div></td>
+          </tr>
+
+          <!-- SECTION 4: MAINTENANCE -->
+          <tr class="section-row"><td colspan="5">4. Maintenance</td></tr>
+          <tr class="maint-row">
+            <td class="col-cat" style="color:#34d399;">Maintenance</td>
+            <td class="col-param" style="color:#34d399;">Annual Maintenance Cost</td>
+            <td class="col-detail" style="color:#94a3b8;">Post-hackathon (if scaled to production): cloud renewal, API subscriptions, ML model quarterly retraining, security patches, new constituency data, language expansion (Tamil, Telugu, Bengali).</td>
+            <td class="col-qty" style="color:#34d399;font-family:var(--mono);">Per annum</td>
+            <td class="maint-cost">₹ 12,00,000 / yr</td>
+          </tr>
+          <tr class="data-row">
+            <td class="col-cat"></td>
+            <td class="col-param">Maintenance Inclusions</td>
+            <td class="col-detail">Bi-annual model accuracy audits, 24×7 uptime monitoring, real-time alert health checks, new regional language NLP models, API version upgrades, dashboard feature additions.</td>
+            <td class="col-qty dash">—</td>
+            <td class="dash">—</td>
+          </tr>
+
+          <!-- SECTION 5: VALUE -->
+          <tr class="section-row"><td colspan="5">5. Key Value Highlights</td></tr>
+          <tr class="data-row">
+            <td class="col-cat"></td>
+            <td class="col-param">Project Impact &amp; Value</td>
+            <td class="col-detail">Real-time misinformation firewall for elections; booth-level voter awareness; AI assistant in Hindi + English; war-room command grid for campaign teams, election observers &amp; media; neutral civic intelligence; public fact-check interface for citizens.</td>
+            <td class="col-qty dash">—</td>
+            <td class="dash">—</td>
+          </tr>
+          <tr class="data-row">
+            <td class="col-cat"></td>
+            <td class="col-param">Cost Comparison</td>
+            <td class="col-detail">Comparable enterprise platforms (Sprinklr Gov, Brandwatch Political) cost ₹3–8 Cr/year in licensing alone. SentimentX delivers equivalent or superior capability in a <strong style="color:#34d399;">1-month sprint at ₹4.97L</strong> — open-stack, no vendor lock-in, fully custom.</td>
+            <td class="col-qty dash">—</td>
+            <td class="dash">—</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ─── COST SUMMARY ────────────────────────── -->
+  <div class="section">
+    <div class="sec-label"><span>04</span> Cost Summary</div>
+    <div class="summary-wrap">
+      <table class="summary-table">
+        <thead>
+          <tr>
+            <th>Line Item</th>
+            <th class="r">Amount (₹)</th>
+            <th class="r">% of Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Dashboard &amp; Full-Stack App Development (React + FastAPI + NLP)</td><td class="r">3,60,000</td><td class="pct">72.4%</td></tr>
+          <tr><td>Team Stipends — 6 members × 1 month @ ₹15,000/member</td><td class="r">90,000</td><td class="pct">18.1%</td></tr>
+          <tr><td>Cloud Infrastructure — AWS EC2, RDS, S3, CDN, Redis (1 month)</td><td class="r">45,000</td><td class="pct">9.0%</td></tr>
+          <tr><td>API Costs — Twitter/X Basic + OpenAI GPT-4o (1 month)</td><td class="r">22,000</td><td class="pct">4.4%</td></tr>
+          <tr><td>Execution, DevOps, Domain &amp; Deployment</td><td class="r">25,000</td><td class="pct">5.0%</td></tr>
+          <tr><td>Prototype &amp; Testing (MVP QA)</td><td class="r">30,000</td><td class="pct">6.0%</td></tr>
+          <tr><td>Contingency Fund (10%)</td><td class="r">25,500</td><td class="pct">5.1%</td></tr>
+          <tr class="gt">
+            <td style="font-family:var(--head);font-size:14px;font-weight:700;color:#f8fafc;">TOTAL (Excl. GST)</td>
+            <td style="text-align:right;font-family:var(--head);font-size:18px;font-weight:800;color:var(--blue);">₹ 4,97,500</td>
+            <td style="text-align:right;font-family:var(--mono);font-size:11px;color:#60a5fa;">Under ₹5 Lakhs ✓</td>
+          </tr>
+          <tr class="am">
+            <td style="color:#34d399;font-family:var(--mono);font-size:11px;">Post-Hackathon AMC (if scaled to production — optional)</td>
+            <td style="text-align:right;font-family:var(--mono);font-weight:500;color:var(--green);">₹ 12,00,000 / yr</td>
+            <td style="text-align:right;font-family:var(--mono);font-size:10px;color:var(--muted);">Per annum</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ─── T&C ─────────────────────────────────── -->
+  <div class="section">
+    <div class="sec-label"><span>05</span> Terms &amp; Conditions</div>
+    <div class="tc-grid">
+      <div class="tc-card">
+        <div class="tc-title">Payment Terms</div>
+        <ul class="tc-list">
+          <li>50% advance on hackathon approval / PO signing</li>
+          <li>50% on final demo &amp; submission (Day 30)</li>
+          <li>GST @ 18% applicable on all invoices</li>
+          <li>Invoices raised in two milestones</li>
+          <li>Payment within 7 days of milestone sign-off</li>
+        </ul>
+      </div>
+      <div class="tc-card">
+        <div class="tc-title">Validity &amp; Warranty</div>
+        <ul class="tc-list">
+          <li>Quotation valid for 30 days from issue date</li>
+          <li>All sprint bugs fixed within 7 days post-demo</li>
+          <li>Model accuracy target ≥78% F1 score (demo data)</li>
+          <li>99% uptime during hackathon demo window</li>
+          <li>Full source code delivered on completion</li>
+        </ul>
+      </div>
+      <div class="tc-card">
+        <div class="tc-title">Deliverables Included</div>
+        <ul class="tc-list">
+          <li>All 7 platform modules (production-grade MVP)</li>
+          <li>NLP pipeline (Hindi + English + Hinglish)</li>
+          <li>AI fact-check assistant (GPT-4o powered)</li>
+          <li>War-room report generator (PDF + CSV export)</li>
+          <li>Source code + technical documentation + README</li>
+        </ul>
+      </div>
+      <div class="tc-card">
+        <div class="tc-title">Exclusions</div>
+        <ul class="tc-list">
+          <li>Twitter/X API enterprise tier upgrade fees</li>
+          <li>Government data licensing / compliance audits</li>
+          <li>Physical hardware or server procurement</li>
+          <li>Post-hackathon cloud costs (covered in AMC)</li>
+          <li>Third-party political data vendor licensing</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── FOOTER ───────────────────────────────── -->
+  <div class="footer">
+    <div>
+      <div class="footer-brand">🧠 SentimentX</div>
+      <div class="footer-team">🔥 Team HACKFIRE</div>
+      <div class="footer-tag">AI Voter Awareness &amp; Misinformation Control — Real Intelligence for Real Democracy</div>
+      <div class="footer-ref">
+        Quote Ref: SX-HF-2026-001 &nbsp;|&nbsp; Valid 30 Days &nbsp;|&nbsp; Excl. GST &nbsp;|&nbsp; Issued: 18 April 2026
+      </div>
+    </div>
+    <div class="sig-block">
+      <div class="sig-name">Pratham Sharma</div>
+      <div class="sig-line">
+        <span class="sig-cursive">Pratham Sharma</span>
+        Authorised Signatory — Team HACKFIRE<br/>
+        Date: 18 / 04 / 2026
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
